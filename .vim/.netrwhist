@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/var/www/vhosts/amanda-com.lv/htdocs/js'
+let g:netrw_dirhist_2='/etc/apache2/sites-available'
+let g:netrw_dirhist_3='/var/www/vhosts/melentjev.com/htdocs'
+let g:netrw_dirhist_4='/var/www/vhosts/amanda-com.lv/htdocs'
+let g:netrw_dirhist_5='/etc/apache2/conf-enabled'

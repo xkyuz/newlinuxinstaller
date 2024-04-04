@@ -9,7 +9,8 @@ sudo dnf config-manager --set-enabled powertools  # For some packages in EPEL th
 sudo dnf update -y && sudo dnf upgrade -y
 
 # Install extra packages needed for system
-sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch git
+sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch gitsudo util-linux-user
+
 
 # Ensure openssh-server (sshd) is enabled and running
 sudo systemctl enable sshd
@@ -37,3 +38,9 @@ rm -rf ~/vimfiles
 
 # Install Oh My Zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# enable zsh as default
+chsh -s $(which zsh)
+
+
+

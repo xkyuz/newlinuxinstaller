@@ -8,6 +8,11 @@ sudo dnf config-manager --set-enabled powertools  # For some packages in EPEL th
 # Update system
 sudo dnf update -y && sudo dnf upgrade -y
 
+# add aliases to bash and zsh 
+echo "alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'" >> ~/.bashrc
+echo "alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'" >> ~/.zshrc
+
+
 # Install extra packages needed for system
 sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch git util-linux-user nmap traceroute
 

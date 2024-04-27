@@ -42,5 +42,8 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 # enable zsh as default
 chsh -s $(which zsh)
 
+# Configure tmux to enable mouse support
+echo "set -g mouse on" >> ~/.tmux.conf
+
 
 

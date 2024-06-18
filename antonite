@@ -23,13 +23,11 @@ sudo systemctl start sshd
 
 # Install Docker and Docker Compose
 sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-sudo dnf install -y docker-ce docker-ce-cli containerd.io
-sudo systemctl start docker && sudo systemctl enable docker
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo systemctl --now enable docker
 
 # Add the current user to the Docker group
-sudo usermod -aG docker $USER
+sudo usermod -aG docker $(whoami)
 
 # Pull Vim settings and apply to both user and root, with backup for existing .vimrc
 git clone https://github.com/xkyuz/vimfiles.git ~/vimfiles

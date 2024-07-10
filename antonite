@@ -45,6 +45,10 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 # enable zsh as default
 chsh -s $(which zsh)
 
+## Download
+wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/mela.zsh-theme
+wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/.zshrc
+
 # Copy mela.zsh-theme to .oh-my-zsh/themes/ folder
 cp mela.zsh-theme ~/.oh-my-zsh/themes/
 # Replace the current .zshrc with the one from the repository

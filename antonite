@@ -49,7 +49,7 @@ wget --output-document zshrc https://raw.githubusercontent.com/xkyuz/newlinuxins
 # Copy mela.zsh-theme to .oh-my-zsh/themes/ folder
 mv mela.zsh-theme ~/.oh-my-zsh/themes/
 # Replace the current .zshrc with the one from the repository
-mv .zshrc ~/.zshrc
+mv ~/zshrc ~/.zshrc
 
 # Configure tmux to enable mouse support
 echo "set -g mouse on" >> ~/.tmux.conf

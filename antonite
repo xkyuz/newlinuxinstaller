@@ -42,9 +42,6 @@ rm -rf ~/vimfiles
 # Install Oh My Zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# enable zsh as default
-chsh -s $(which zsh)
-
 ## Download
 wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/mela.zsh-theme
 wget --output-document zshrc https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/.zshrc
@@ -57,5 +54,7 @@ mv .zshrc ~/.zshrc
 # Configure tmux to enable mouse support
 echo "set -g mouse on" >> ~/.tmux.conf
 
+# enable zsh as default
+chsh -s $(which zsh)
 
 

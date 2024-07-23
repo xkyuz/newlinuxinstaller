@@ -47,12 +47,12 @@ chsh -s $(which zsh)
 
 ## Download
 wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/mela.zsh-theme
-wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/.zshrc
+wget --output-document zshrc https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/.zshrc
 
 # Copy mela.zsh-theme to .oh-my-zsh/themes/ folder
-cp mela.zsh-theme ~/.oh-my-zsh/themes/
+mv mela.zsh-theme ~/.oh-my-zsh/themes/
 # Replace the current .zshrc with the one from the repository
-cp .zshrc ~/.zshrc
+mv .zshrc ~/.zshrc
 
 # Configure tmux to enable mouse support
 echo "set -g mouse on" >> ~/.tmux.conf

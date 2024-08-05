@@ -16,7 +16,6 @@ echo "alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'" >> ~/.zshrc
 # Install extra packages needed for system
 sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch git util-linux-user nmap traceroute
 
-
 # Ensure openssh-server (sshd) is enabled and running
 sudo systemctl enable sshd
 sudo systemctl start sshd
@@ -39,14 +38,13 @@ sudo cp ~/vimfiles/vimrc /root/.vimrc
 sudo mv -v vimfiles/vim /root/.vim
 rm -rf ~/vimfiles
 
-# Install Oh My Zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-## Download
+## Download zsh settings
 wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/mela.zsh-theme
 wget --output-document zshrc https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/.zshrc
 
 # Copy mela.zsh-theme to .oh-my-zsh/themes/ folder
+mkdir ~/.oh-my-zsh/
+mkdir ~/.oh-my-zsh/themes/
 mv mela.zsh-theme ~/.oh-my-zsh/themes/
 # Replace the current .zshrc with the one from the repository
 mv ~/zshrc ~/.zshrc
@@ -56,5 +54,9 @@ echo "set -g mouse on" >> ~/.tmux.conf
 
 # enable zsh as default
 chsh -s $(which zsh)
+
+# Install Oh My Zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
 
 

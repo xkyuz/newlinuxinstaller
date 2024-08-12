@@ -14,7 +14,7 @@ echo "alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'" >> ~/.zshrc
 
 
 # Install extra packages needed for system
-sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch git util-linux-user nmap traceroute
+sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch git util-linux-user nmap traceroute net-tools
 
 # Ensure openssh-server (sshd) is enabled and running
 sudo systemctl enable sshd

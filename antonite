@@ -42,9 +42,9 @@ rm -rf ~/vimfiles
 wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/mela.zsh-theme
 wget --output-document zshrc https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/.zshrc
 
-# Copy mela.zsh-theme to .oh-my-zsh/themes/ folder
-mkdir ~/.oh-my-zsh/
-mkdir ~/.oh-my-zsh/themes/
+# Install Oh My Zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
 mv mela.zsh-theme ~/.oh-my-zsh/themes/
 # Replace the current .zshrc with the one from the repository
 mv ~/zshrc ~/.zshrc
@@ -55,8 +55,6 @@ echo "set -g mouse on" >> ~/.tmux.conf
 # enable zsh as default
 chsh -s $(which zsh)
 
-# Install Oh My Zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 
 

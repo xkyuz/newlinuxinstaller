@@ -1,0 +1,77 @@
+#!/bin/sh
+# Script is meant for getting Debian/Raspbian based systems up and running
+
+# Update system
+sudo apt-get update
+sudo apt-get upgrade -y
+
+# Add alias to bash and zsh for quick system update
+echo "alias uupdate='sudo apt-get update && sudo apt-get upgrade -y && sudo apt dist-upgrade'" >> ~/.bashrc
+echo "alias uupdate='sudo apt-get update && sudo apt-get upgrade -y && sudo apt dist-upgrade'" >> ~/.zshrc
+
+# Install packages needed for system
+sudo apt-get install -y \
+    zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch git nmap traceroute net-tools
+
+# Ensure openssh-server (ssh) is enabled and running
+sudo systemctl enable ssh
+sudo systemctl start ssh
+
+# ------------------------------------------------------------
+# Install Docker and Docker Compose (official Docker repo)
+# ------------------------------------------------------------
+
+# 1. Install required packages
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    software-properties-common
+
+## Install docker one-liner 
+curl -sSL https://get.docker.com/ | sh
+
+# 5. Enable and start Docker
+sudo systemctl enable docker
+sudo systemctl start docker
+
+# 6. Add the current user to the Docker group
+sudo usermod -aG docker "$(whoami)"
+
+# ------------------------------------------------------------
+# Pull Vim settings and apply to both user and root
+# ------------------------------------------------------------
+git clone https://github.com/xkyuz/vimfiles.git ~/vimfiles
+mv ~/.vimrc ~/.vimrc.backup 2> /dev/null
+cp ~/vimfiles/vimrc ~/.vimrc
+mv -v ~/vimfiles/vim ~/.vim
+
+sudo mv /root/.vimrc /root/.vimrc.backup 2> /dev/null
+sudo cp ~/vimfiles/vimrc /root/.vimrc
+sudo mv -v ~/vimfiles/vim /root/.vim
+
+# Remove temporary vimfiles folder
+rm -rf ~/vimfiles
+
+# ------------------------------------------------------------
+# Download Zsh settings
+# ------------------------------------------------------------
+wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/mela.zsh-theme
+wget --output-document zshrc https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/.zshrc
+
+# Install Oh My Zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# Move theme and configuration
+mv mela.zsh-theme ~/.oh-my-zsh/themes/
+mv ~/zshrc ~/.zshrc
+
+# Configure tmux to enable mouse support
+echo "set -g mouse on" >> ~/.tmux.conf
+
+# Enable zsh as default shell
+chsh -s "$(which zsh)"
+
+echo "Setup completed. Please log out and log back in (or reboot) for all changes to take effect."

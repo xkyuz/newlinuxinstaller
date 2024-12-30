@@ -21,9 +21,7 @@ sudo systemctl enable sshd
 sudo systemctl start sshd
 
 # Install Docker and Docker Compose
-sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-sudo systemctl --now enable docker
+curl -sSL https://get.docker.com/ | sh
 
 # Add the current user to the Docker group
 sudo usermod -aG docker $(whoami)

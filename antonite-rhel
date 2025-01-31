@@ -47,6 +47,14 @@ mv mela.zsh-theme ~/.oh-my-zsh/themes/
 # Replace the current .zshrc with the one from the repository
 mv ~/zshrc ~/.zshrc
 
+LINE="alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'"
+FILE=~/.zshrc
+
+if ! grep -Fxq "$LINE" "$FILE"
+then
+  echo "$LINE" >> "$FILE"
+fi
+
 # Configure tmux to enable mouse support
 echo "set -g mouse on" >> ~/.tmux.conf
 

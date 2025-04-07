@@ -20,11 +20,11 @@ sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop 
 sudo systemctl enable sshd
 sudo systemctl start sshd
 
-# Install Docker and Docker Compose
-curl -sSL https://get.docker.com/ | sh
-
-# Add the current user to the Docker group
-sudo usermod -aG docker $(whoami)
+# Install Docker only if not installed
+if ! command_exists docker; then
+    curl -sSL https://get.docker.com/ | sh
+    sudo usermod -aG docker "$(whoami)"
+fi
 
 # Pull Vim settings and apply to both user and root, with backup for existing .vimrc
 git clone https://github.com/xkyuz/vimfiles.git ~/vimfiles

@@ -1,6 +1,11 @@
 #!/bin/sh
 # Script is meant for getting Red Hat based systems up and running
 
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
 # Enable EPEL Repository
 sudo dnf install epel-release -y
 sudo dnf config-manager --set-enabled powertools  # For some packages in EPEL that depend on PowerTools

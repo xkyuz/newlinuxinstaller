@@ -6,6 +6,19 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Function to ask user if they want to install Docker
+ask_install_docker() {
+    while true; do
+        printf "Do you want to install Docker? [y/n]: "
+        read -r answer
+        case $answer in
+            [Yy]* ) return 0;;
+            [Nn]* ) return 1;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
+
 # Enable EPEL Repository
 sudo dnf install epel-release -y
 sudo dnf config-manager --set-enabled powertools  # For some packages in EPEL that depend on PowerTools
@@ -13,10 +26,9 @@ sudo dnf config-manager --set-enabled powertools  # For some packages in EPEL th
 # Update system
 sudo dnf update -y && sudo dnf upgrade -y
 
-# add aliases to bash and zsh 
+# add aliases to bash and zsh
 echo "alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'" >> ~/.bashrc
 echo "alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'" >> ~/.zshrc
-
 
 # Install extra packages needed for system
 sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch git util-linux-user nmap traceroute net-tools
@@ -25,10 +37,12 @@ sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop 
 sudo systemctl enable sshd
 sudo systemctl start sshd
 
-# Install Docker only if not installed
-if ! command_exists docker; then
+# Install Docker if user wants it
+if ! command_exists docker && ask_install_docker; then
+    echo "Installing Docker..."
     curl -sSL https://get.docker.com/ | sh
     sudo usermod -aG docker "$(whoami)"
+    echo "Docker installed. You may need to log out and back in for group changes to take effect."
 fi
 
 # Pull Vim settings and apply to both user and root, with backup for existing .vimrc
@@ -45,20 +59,18 @@ rm -rf ~/vimfiles
 wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/mela.zsh-theme
 wget --output-document zshrc https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/.zshrc
 
-# Install Oh My Zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-mv mela.zsh-theme ~/.oh-my-zsh/themes/
-# Replace the current .zshrc with the one from the repository
-mv ~/zshrc ~/.zshrc
-
-LINE="alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'"
-FILE=~/.zshrc
-
-if ! grep -Fxq "$LINE" "$FILE"
-then
-  echo "$LINE" >> "$FILE"
-fi
+# Install Oh My Zsh - run in a subshell to prevent zsh from taking over
+(
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    mv mela.zsh-theme ~/.oh-my-zsh/themes/
+    # Replace the current .zshrc with the one from the repository
+    mv ~/zshrc ~/.zshrc
+    LINE="alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'"
+    FILE=~/.zshrc
+    if ! grep -Fxq "$LINE" "$FILE"; then
+        echo "$LINE" >> "$FILE"
+    fi
+)
 
 # Configure tmux to enable mouse support
 echo "set -g mouse on" >> ~/.tmux.conf
@@ -66,6 +78,4 @@ echo "set -g mouse on" >> ~/.tmux.conf
 # enable zsh as default
 chsh -s $(which zsh)
 
-
-
-
+echo "Installation complete! You may need to log out and back in for changes to take effect."

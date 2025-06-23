@@ -21,7 +21,6 @@ ask_install_docker() {
 
 # Enable EPEL Repository
 sudo dnf install epel-release -y
-sudo dnf config-manager --set-enabled powertools  # For some packages in EPEL that depend on PowerTools
 
 # Update system
 sudo dnf update -y && sudo dnf upgrade -y
@@ -31,7 +30,7 @@ echo "alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'" >> ~/.bashrc
 echo "alias uupdate='sudo dnf update -y && sudo dnf upgrade -y'" >> ~/.zshrc
 
 # Install extra packages needed for system
-sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch git util-linux-user nmap traceroute net-tools
+sudo dnf install -y zsh vim openssh-server htop wireshark tmux python3 zip btop fzf tldr neofetch git util-linux-user nmap traceroute net-tools wireguard-tools
 
 # Ensure openssh-server (sshd) is enabled and running
 sudo systemctl enable sshd

@@ -1,6 +1,24 @@
 #!/bin/sh
 # Script is meant for getting Debian/Raspbian based systems up and running
 
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Function to ask user if they want to install Docker
+ask_install_docker() {
+    while true; do
+        printf "Do you want to install Docker? [y/n]: "
+        read -r answer
+        case $answer in
+            [Yy]* ) return 0;;
+            [Nn]* ) return 1;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
+
 # Update system
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -20,20 +38,21 @@ sudo systemctl start ssh
 # ------------------------------------------------------------
 # Install Docker and Docker Compose (official Docker repo)
 # ------------------------------------------------------------
-
-# 1. Install required packages
-sudo apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release \
-    software-properties-common
-
-# Install Docker only if not installed
-if ! command_exists docker; then
+if ! command_exists docker && ask_install_docker; then
+    echo "Installing Docker..."
+    # 1. Install required packages
+    sudo apt-get install -y \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg \
+        lsb-release \
+        software-properties-common
+    
+    # Install Docker
     curl -sSL https://get.docker.com/ | sh
     sudo usermod -aG docker "$(whoami)"
+    echo "Docker installed. You may need to log out and back in for group changes to take effect."
 fi
 
 # ------------------------------------------------------------
@@ -43,11 +62,9 @@ git clone https://github.com/xkyuz/vimfiles.git ~/vimfiles
 mv ~/.vimrc ~/.vimrc.backup 2> /dev/null
 cp ~/vimfiles/vimrc ~/.vimrc
 mv -v ~/vimfiles/vim ~/.vim
-
 sudo mv /root/.vimrc /root/.vimrc.backup 2> /dev/null
 sudo cp ~/vimfiles/vimrc /root/.vimrc
 sudo mv -v ~/vimfiles/vim /root/.vim
-
 # Remove temporary vimfiles folder
 rm -rf ~/vimfiles
 
@@ -57,20 +74,18 @@ rm -rf ~/vimfiles
 wget https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/mela.zsh-theme
 wget --output-document zshrc https://raw.githubusercontent.com/xkyuz/newlinuxinstaller/master/.zshrc
 
-# Install Oh My Zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# Move theme and configuration
-mv mela.zsh-theme ~/.oh-my-zsh/themes/
-mv ~/zshrc ~/.zshrc
-
-LINE="alias uupdate='sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y'"
-FILE=~/.zshrc
-
-if ! grep -Fxq "$LINE" "$FILE"
-then
-  echo "$LINE" >> "$FILE"
-fi
+# Install Oh My Zsh - run in a subshell to prevent zsh from taking over
+(
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    # Move theme and configuration
+    mv mela.zsh-theme ~/.oh-my-zsh/themes/
+    mv ~/zshrc ~/.zshrc
+    LINE="alias uupdate='sudo apt update -y && sudo apt upgrade -y && sudo apt dist-upgrade -y'"
+    FILE=~/.zshrc
+    if ! grep -Fxq "$LINE" "$FILE"; then
+        echo "$LINE" >> "$FILE"
+    fi
+)
 
 # Configure tmux to enable mouse support
 echo "set -g mouse on" >> ~/.tmux.conf
